@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Binary Signals</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#0f172a,#020617);
+color:white;
+text-align:center;
+}
+
+header{
+padding:20px;
+font-size:24px;
+font-weight:bold;
+}
+
+.mode{
+margin:10px;
+}
+
+button{
+background:#2563eb;
+border:none;
+padding:10px 18px;
+margin:5px;
+border-radius:8px;
+color:white;
+font-size:14px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.container{
+padding:10px;
+}
+
+.signal{
+background:#1e293b;
+padding:15px;
+margin:10px;
+border-radius:12px;
+box-shadow:0 0 10px rgba(0,0,0,0.4);
+}
+
+.pair{
+font-size:18px;
+font-weight:bold;
+}
+
+.call{
+color:#22c55e;
+}
+
+.put{
+color:#ef4444;
+}
+
+.conf{
+opacity:0.8;
+font-size:13px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+Binary Signals
+</header>
+
+<div class="mode">
+<button onclick="setMode('Aggressive')">⚡️ Aggressive</button>
+<button onclick="setMode('Precision')">🎯 Precision</button>
+<button onclick="generate()">🔄 Refresh</button>
+</div>
+
+<div class="container" id="signals"></div>
+
+<script>
+
+let mode = "Aggressive";
+
+let pairs = [
+"EUR/USD","GBP/USD","USD/JPY","AUD/USD",
+"USD/CAD","USD/CHF","EUR/JPY","GBP/JPY",
+"AUD/JPY","EUR/GBP","NZD/USD","EUR/AUD"
+];
+
+function setMode(m){
+mode = m;
+generate();
+}
+
+function generate(){
+
+let container = document.getElementById("signals");
+container.innerHTML = "";
+
+pairs.forEach(pair => {
+
+let call = Math.random() > 0.5;
+
+let signal = call ? "CALL ⬆️" : "PUT ⬇️";
+let color = call ? "call" : "put";
+
+let expiry = mode === "Aggressive" ? "1m" : "5m";
+
+let confidence = mode === "Aggressive"
+? Math.floor(50 + Math.random()*10)
+: Math.floor(65 + Math.random()*7);
+
+let div = document.createElement("div");
+
+div.className="signal";
+
+div.innerHTML = `
+<div class="pair">${pair}</div>
+<div class="${color}">${signal}</div>
+<div>Expiry: ${expiry}</div>
+<div class="conf">Confidence: ${confidence}%</div>
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+generate();
+
+setInterval(generate,60000);
+
+</script>
+
+</body>
+</html>
